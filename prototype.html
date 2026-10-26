@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>క్రిషిమిత్ర</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Inter', sans-serif; background-color: #f0fdf4; color: #166534; }
+.card { background-color: white; border: 2px solid #a3e635; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom:1rem; padding:1rem; border-radius:1rem;}
+.btn-primary { background-color: #84cc16; color: white; transition: all 0.2s ease-in-out; }
+.btn-primary:hover { background-color: #65a30d; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.nav-icon { font-size: 2.5rem; color: #16a34a; transition: all 0.2s ease-in-out; }
+.nav-icon:hover { transform: scale(1.1); }
+.special-btn { background: linear-gradient(45deg, #16a34a, #84cc16); color: white; }
+</style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-green-50">
+
+<div id="app" class="w-full h-full">
+
+    <div id="login-screen" class="flex flex-col items-center justify-center min-h-screen p-6 text-center">
+        <div class="mb-8">
+            <h1 class="text-6xl font-extrabold text-green-700 tracking-wider mb-2">క్రిషిమిత్ర</h1>
+            <p class="text-xl font-medium text-green-600">మీ వ్యవసాయ మిత్రుడు</p>
+        </div>
+        <div class="w-full max-w-sm">
+            <div class="card">
+                <h2 class="text-3xl font-bold text-green-800 mb-6">లాగిన్</h2>
+                <input type="text" id="username-input" class="w-full p-3 mb-4 border rounded-lg text-green-900" placeholder="యూజర్ పేరు">
+                <input type="password" id="password-input" class="w-full p-3 mb-4 border rounded-lg text-green-900" placeholder="పాస్‌వర్డ్">
+                <p id="login-error-message" class="text-red-500 text-sm mb-4 hidden"></p>
+                <button id="login-btn" class="special-btn w-full px-6 py-3 text-lg font-bold rounded-full shadow-lg hover:scale-105 transform transition duration-300">
+                    లాగిన్
+                </button>
+            </div>
+            <p class="mt-4 text-sm text-green-700">ఖాతా లేదు? </p>
+            <button id="guest-btn" class="text-green-600 hover:text-green-800 font-semibold mt-2 underline transition duration-300">
+                ప్రారంభించు
+            </button>
+        </div>
+    </div>
+
+    <div id="home-screen" class="hidden flex flex-col min-h-screen p-6">
+        <header class="flex flex-row items-center justify-between w-full mb-6">
+            <h2 class="text-3xl font-bold text-green-800">క్రిషిమిత్ర</h2>
+            <div class="flex items-center gap-2 text-green-600">
+                <span id="ai-greeting"></span>
+            </div>
+        </header>
+
+        <div class="flex flex-col items-center gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-lg">
+                <button class="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:bg-green-100" onclick="showModal('voice')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2a4 4 0 00-4 4v6a4 4 0 008 0V6a4 4 0 00-4-4z"/>
+                      <path d="M19 12a7 7 0 01-14 0c0-1.85 0-3.59.38-5.26"/>
+                    </svg>
+                    <span class="mt-2 text-sm text-green-800 font-semibold text-center">వాయిస్ ఇన్పుట్</span>
+                </button>
+                <button class="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:bg-green-100" onclick="showModal('text')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM5 5v14h14V5H5z"/>
+                    </svg>
+                    <span class="mt-2 text-sm text-green-800 font-semibold text-center">టెక్స్ట్ ఇన్పుట్</span>
+                </button>
+                <button class="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:bg-green-100" onclick="showModal('image')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM5 5h14v14H5V5zm2 8l3-4 2 3 3-4 4 6H7z"/>
+                    </svg>
+                    <span class="mt-2 text-sm text-green-800 font-semibold text-center">ఇమేజ్ ఇన్పుట్</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col gap-4 mt-4 w-full max-w-lg">
+                <button onclick="showModal('register-crop')" class="btn-primary px-6 py-3 rounded-full">క్రాప్ రిజిస్ట్రేషన్</button>
+                <button onclick="openMonitoring()" class="btn-primary px-6 py-3 rounded-full">పంట పర్యవేక్షణ</button>
+            </div>
+
+            <div id="dashboard" class="mt-6 w-full max-w-lg"></div>
+        </div>
+    </div>
+
+    <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-lg">
+            <h3 id="modal-title" class="text-2xl font-bold text-green-800 mb-4 text-center"></h3>
+            <div id="modal-content"></div>
+            <div class="mt-4 flex justify-center">
+                <button class="px-6 py-2 btn-primary rounded-full" onclick="closeModal()">మూసివేయి</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ===================================
+// Voice (TTS & STT)
+// ===================================
+function speakText(text){
+    try{
+        if('speechSynthesis' in window){
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang='te-IN';
+            utter.pitch=1;
+            utter.rate=1;
+            const voices = window.speechSynthesis.getVoices();
+            const teVoice = voices.find(v => v.lang === 'te-IN' && v.name.toLowerCase().includes('female')) || null;
+            if(teVoice) utter.voice = teVoice;
+            speechSynthesis.speak(utter);
+        }
+    }catch(e){console.error(e);}
+}
+
+function startVoiceInput(){
+    if(!('webkitSpeechRecognition' in window)){ 
+        alert("ఈ బ్రౌజర్ వాయిస్ ఇన్పుట్ సపోర్ట్ చేయదు.");
+        speakText("ఈ బ్రౌజర్ వాయిస్ ఇన్పుట్ సపోర్ట్ చేయదు.");
+        return;
+    }
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang='te-IN';
+    recognition.interimResults=false;
+    recognition.maxAlternatives=1;
+    recognition.onresult = function(e){
+        const speech = e.results[0][0].transcript;
+        const qInput = document.getElementById('voice-query-text');
+        if (qInput) qInput.value = speech;
+        speakText("మీ ప్రశ్న స్వీకరించబడింది.");
+    };
+    recognition.start();
+}
+
+
+// ===================================
+// Login & Greet
+// ===================================
+document.getElementById('login-btn').addEventListener('click', function(){
+    const username = document.getElementById('username-input').value.trim();
+    const password = document.getElementById('password-input').value.trim();
+    const err = document.getElementById('login-error-message');
+    if(username && password){
+        err.classList.add('hidden');
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('home-screen').classList.remove('hidden');
+        greetUser(username);
+        renderDashboard();
+    } else {
+        err.textContent = "దయచేసి యూజర్ పేరు మరియు పాస్‌వర్డ్ నమోదు చేయండి.";
+        err.classList.remove('hidden');
+        speakText(err.textContent);
+    }
+});
+
+document.getElementById('guest-btn').addEventListener('click', function(){
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('home-screen').classList.remove('hidden');
+    greetUser("అతిథి");
+    renderDashboard();
+});
+
+function greetUser(name){
+    const hour = new Date().getHours();
+    let timeGreeting = (hour >= 6 && hour < 12) ? "శుభోదయం" :
+                       (hour >= 12 && hour < 17) ? "మధ్యాహ్నం శుభాకాంక్షలు" :
+                       (hour >= 17 && hour < 21) ? "శుభ సాయంత్రం" : "శుభ రాత్రి";
+    const greetMsg = `${timeGreeting} ${name}! నేను మీకు ఎలా సహాయం చేయగలను?`;
+    document.getElementById('ai-greeting').textContent = greetMsg;
+    speakText(greetMsg);
+}
+
+// ===================================
+// Crop Data & Storage
+// ===================================
+let crops = JSON.parse(localStorage.getItem('crops') || '[]');
+
+function saveCrops(){ localStorage.setItem('crops', JSON.stringify(crops)); }
+
+function renderDashboard(){
+    const dash = document.getElementById('dashboard');
+    dash.innerHTML = "";
+    if(crops.length === 0){
+        dash.innerHTML = `<p class="text-center text-green-700">ఇంకా పంటలు నమోదు చేయలేదు. కొత్త పంటను నమోదు చేయండి!</p>`;
+        return;
+    }
+    crops.forEach((c, i) => {
+        const div = document.createElement('div');
+        div.className = "card flex flex-col p-4";
+        div.innerHTML = `<h4 class="font-bold text-green-800">${c.name} (${c.stage})</h4>
+                         ${c.image ? `<img src="${c.image}" class="mt-2 rounded-lg w-full"/>` : ''}
+                         <p class="mt-2">పనులు: ${c.tasks.join(', ')}</p>
+                         <button onclick="deleteCrop(${i})" class="btn-primary px-4 py-2 mt-2 rounded-lg w-full text-white">పంట తొలగించు</button>`;
+        dash.appendChild(div);
+    });
+}
+
+// ===================================
+// Modal & UI Logic
+// ===================================
+function showModal(type){
+    const modal = document.getElementById('modal');
+    const title = document.getElementById('modal-title');
+    const content = document.getElementById('modal-content');
+    modal.classList.remove('hidden');
+    content.innerHTML = "";
+
+    switch(type){
+        case 'voice':
+            title.textContent = "వాయిస్ ఇన్పుట్";
+            content.innerHTML = `<p class="text-green-700 text-center">మీ ప్రశ్నను చెప్పండి.</p>
+                                <button class="btn-primary mt-4 px-4 py-2 rounded-full" onclick="startVoiceInput()">వాయిస్ ఇన్పుట్ ప్రారంభించు</button>
+                                <textarea id="voice-query-text" class="w-full border p-2 rounded-lg mt-4" placeholder="మీ ప్రశ్నను ఇక్కడ రాయండి" rows="3"></textarea>
+                                <button class="btn-primary mt-2 px-4 py-2 rounded-full w-full" onclick="submitQuery('voice')">సబ్మిట్</button>`;
+            speakText("మీ ప్రశ్నను అడగండి.");
+            break;
+        case 'text':
+            title.textContent = "టెక్స్ట్ ఇన్పుట్";
+            content.innerHTML = `<textarea id="text-query-text" class="w-full border p-2 rounded-lg" placeholder="మీ ప్రశ్నను ఇక్కడ టైప్ చేయండి" rows="3"></textarea>
+                                <button class="btn-primary mt-2 px-4 py-2 rounded-full w-full" onclick="submitQuery('text')">సబ్మిట్</button>`;
+            speakText("మీ ప్రశ్నను ఇక్కడ టైప్ చేయండి.");
+            break;
+        case 'image':
+            title.textContent = "ఇమేజ్ ఇన్పుట్";
+            content.innerHTML = `<input type="file" accept="image/*" id="image-file" class="w-full border p-2 rounded-lg mb-2">
+                                <textarea id="image-query-text" class="w-full border p-2 rounded-lg mt-2" placeholder="మీ ప్రశ్నను ఇక్కడ అడగండి" rows="3"></textarea>
+                                <button class="btn-primary mt-2 px-4 py-2 rounded-full w-full" onclick="submitQuery('image')">సబ్మిట్</button>`;
+            speakText("మీ పంట సమస్య యొక్క ఫోటోను అప్లోడ్ చేసి ప్రశ్న అడగండి.");
+            break;
+        case 'register-crop':
+            title.textContent = "క్రాప్ రిజిస్ట్రేషన్";
+            content.innerHTML = `<input type="text" id="crop-name" class="w-full border p-2 rounded-lg mb-2" placeholder="పంట పేరు">
+                                <input type="text" id="crop-stage" class="w-full border p-2 rounded-lg mb-2" placeholder="స్థాయి (ఉదా: విత్తు దశ)">
+                                <input type="text" id="crop-tasks" class="w-full border p-2 rounded-lg mb-2" placeholder="పనులు (ఉదా: నీరు ఇవ్వండి, పురుగు తనిఖీ)">
+                                <input type="file" accept="image/*" id="crop-image" class="w-full border p-2 rounded-lg mb-2">
+                                <button class="btn-primary mt-2 px-4 py-2 rounded-full w-full" onclick="registerCrop()">రిజిస్టర్ చేయండి</button>`;
+            speakText("పంటను నమోదు చేయండి.");
+            break;
+    }
+}
+
+function closeModal(){ document.getElementById('modal').classList.add('hidden'); }
+
+// ===================================
+// Query & Response Logic (Simulated)
+// ===================================
+const sampleAnswers = [
+    "పంటకు తగినంత నీరు ఇవ్వండి.",
+    "పంటపై తేలికపాటి జల్లులు ఉండే అవకాశం ఉంది.",
+    "ఈ రోజున ఎటువంటి కృషి చేయాలి చూడండి.",
+    "గడ్డి లేదా తేమ సమస్య లేదు.",
+    "పంటకు రాసాయనాల మోతాదు తగ్గించండి.",
+    "వాన రాబోవు అవకాశం ఉంది, పంట రక్షణ చిట్కాలు పాటించండి."
+];
+
+function getRandomAnswer(){ return sampleAnswers[Math.floor(Math.random() * sampleAnswers.length)]; }
+
+function submitQuery(type){
+    let query;
+    if(type === 'voice') {
+        query = document.getElementById('voice-query-text').value.trim();
+    } else if(type === 'text') {
+        query = document.getElementById('text-query-text').value.trim();
+    } else if(type === 'image') {
+        query = document.getElementById('image-query-text').value.trim();
+    }
+
+    if(query) {
+        speakText("మీ ప్రశ్నను ప్రక్రియలో ఉంచుతోంది...");
+        setTimeout(() => {
+            const ans = getRandomAnswer();
+            const content = document.getElementById('modal-content');
+            content.innerHTML += `<p class="text-green-800 text-center mt-4">సమాధానం: ${ans}</p>`;
+            speakText(ans);
+        }, 1500);
+    }
+}
+
+// ===================================
+// Crop Management
+// ===================================
+function registerCrop(){
+    const name = document.getElementById('crop-name').value.trim();
+    const stage = document.getElementById('crop-stage').value.trim();
+    const tasks = document.getElementById('crop-tasks').value.trim().split(',').map(t => t.trim());
+    const imgInput = document.getElementById('crop-image').files[0];
+
+    if(name && stage){
+        const reader = new FileReader();
+        reader.onload = function(e){
+            crops.push({name, stage, tasks, image: e.target.result});
+            saveCrops();
+            closeModal();
+            speakText(`${name} పంటను విజయవంతంగా నమోదు చేసారు.`);
+            renderDashboard();
+        };
+        if(imgInput) reader.readAsDataURL(imgInput);
+        else {
+             crops.push({name, stage, tasks, image: ''});
+             saveCrops();
+             closeModal();
+             speakText(`${name} పంటను విజయవంతంగా నమోదు చేసారు.`);
+             renderDashboard();
+        }
+    } else {
+        speakText("దయచేసి అన్ని ఫీల్డ్స్ ను భర్తీ చేయండి.");
+    }
+}
+
+function deleteCrop(index){
+    const name = crops[index].name;
+    crops.splice(index, 1);
+    saveCrops();
+    renderDashboard();
+    speakText(`${name} పంటను తొలగించారు.`);
+}
+
+function openMonitoring(){
+    const dash = document.getElementById('dashboard');
+    dash.innerHTML = "";
+    if(crops.length === 0){
+        speakText("ఇంకా ఏ పంట రిజిస్టర్ చేయబడలేదు.");
+        return;
+    }
+    
+    // Display daily tasks
+    const todayTasks = [];
+    crops.forEach(c => {
+        c.tasks.forEach(t => todayTasks.push({ crop: c.name, task: t }));
+    });
+    if(todayTasks.length > 0){
+        let tasksHtml = '<h3 class="font-bold text-green-800 mt-4 mb-2">ఈ రోజు పనులు:</h3>';
+        todayTasks.forEach(t => {
+            tasksHtml += `<p>${t.crop}: ${t.task}</p>`;
+            speakText(`${t.crop}: ${t.task}`);
+        });
+        dash.innerHTML += `<div class="card p-4 mb-4 rounded-2xl">${tasksHtml}</div>`;
+    }
+
+    // Display weather alerts
+    const weatherAlertsHtml = `<div class="card p-4 mb-4 rounded-2xl">
+                                    <h3 class="font-bold text-green-800 mb-2">వాతావరణ సూచనలు</h3>
+                                    <p class="text-green-700">ఈ రోజు వర్షం సంభవించవచ్చు, అవసరమైతే పంట రక్షణ చర్యలు తీసుకోండి.</p>
+                               </div>`;
+    dash.innerHTML += weatherAlertsHtml;
+    speakText("ఈ రోజు వర్షం సంభవించవచ్చు, అవసరమైతే పంట రక్షణ చర్యలు తీసుకోండి.");
+    
+    // Display crop cards
+    crops.forEach((c, i) => {
+        const div = document.createElement('div');
+        div.className = "card flex flex-col p-4";
+        div.innerHTML = `<h4 class="font-bold text-green-800">${c.name} (${c.stage})</h4>
+                         ${c.image ? `<img src="${c.image}" class="mt-2 rounded-lg w-full"/>` : ''}
+                         <p class="mt-2">పనులు: ${c.tasks.join(', ')}</p>
+                         <button onclick="deleteCrop(${i})" class="btn-primary px-4 py-2 mt-2 rounded-lg w-full text-white">పంట తొలగించు</button>`;
+        dash.appendChild(div);
+    });
+}
+
+// Initial rendering on page load for any saved crops
+window.onload = function() {
+    renderDashboard();
+};
+</script>
+</body>
+</html>
